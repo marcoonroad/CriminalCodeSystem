@@ -4,6 +4,7 @@ namespace CriminalCodeSystem.Request.CriminalCode;
 
 public class ListRequest
 {
+    public string AccessToken { get; set; } = "";
     public int NextId { get; set; }
     public int Limit { get; set; } = 50;
     public int Offset { get; set; } = 0;

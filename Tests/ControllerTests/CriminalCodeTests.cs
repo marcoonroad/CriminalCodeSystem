@@ -110,17 +110,10 @@ public class CriminalCodeTests
                 "dois). Provas suficientes a embasar o decreto condenatório. Insurgência quanto às penas restritivas de direitos. Prestação de serviços à " +
                 "comunidade fixada corretamente, segundo os ditames do CP, art. 46 e CP, art. 55. Sanção de prestação pecuniária que, de igual modo, não merece " +
                 "alteração. Quantum arbitrado no mínimo legal. Matérias, outrossim, que poderão ser reexaminadas pelo juízo da execução. Sentença condenatória " +
-                "mantida. Recurso conhecido e desprovido.Apelação criminal. Crime contra a incolumidade pública. Disparo de arma de fogo em via pública (Lei " +
-                "10.826/2003, art. 15). Recurso defensivo. Pretendida a absolvição por ausência de provas. Insubsistência. Materialidade e autoria devidamente " +
-                "comprovadas. Depoimentos firmes e coerentes das testemunhas oculares do ilícito amparados pelos relatos dos policiais militares responsáveis pela " +
-                "apreensão do artefato na residência do réu. Arma de fogo encontrada com apenas 04 (quatro) dos 06 (seis) cartuchos. Diferença equivalente aos disparos " +
-                "efetuados na via pública (02 - dois). Provas suficientes a embasar o decreto condenatório. Insurgência quanto às penas restritivas de direitos. Prestação " +
-                "de serviços à comunidade fixada corretamente, segundo os ditames do CP, art. 46 e CP, art. 55. Sanção de prestação pecuniária que, de igual modo, " +
-                "não merece alteração. Quantum arbitrado no mínimo legal. Matérias, outrossim, que poderão ser reexaminadas pelo juízo da execução. Sentença condenatória " +
                 "mantida. Recurso conhecido e desprovido.",
                 Status = "REVISADO",
             };
-            AddResponse response = await controller.PostAsync(request);
+            AddResponse response = await controller.AddAsync(request);
             Assert.AreEqual(0, response.Status);
             Assert.AreEqual("SUCCESS", response.Message);
         }
@@ -135,5 +128,18 @@ public class CriminalCodeTests
         User? foundUser = await userContext.Users.SingleOrDefaultAsync(user => user.Id == foundCriminalCode.CreateUserId);
         Assert.IsNotNull(foundUser);
         Assert.AreEqual("user-example", foundUser.UserName);
+
+        {
+            FindRequest request = new FindRequest
+            {
+                AccessToken = accessToken,
+                CriminalCodeName = "Apelação criminal. Crime contra a incolumidade pública",
+            };
+            FindResponse response = await controller.FindAsync(request);
+            Assert.IsNotNull(response.FoundCriminalCode);
+            Assert.AreEqual(0, response.Status);
+            Assert.AreEqual("SUCCESS", response.Message);
+            Assert.AreEqual(foundUser.Id, response.FoundCriminalCode.CreateUserId);
+        }
     }
 }

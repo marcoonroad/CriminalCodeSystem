@@ -44,7 +44,8 @@ public class UserController : ControllerBase
             return response;
         }
         response.AccessToken = JwtManager.GenerateToken(request.UserName);
-        
+        response.ExpiresAfter = JwtUtils.GetExpiryTimestampFromJwt(response.AccessToken);
+
         return response;
     }
 

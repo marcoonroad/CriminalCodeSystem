@@ -11,12 +11,13 @@ Criar arquivo `CriminalCodeSystem/credentials.json` no seguinte formato.
 {
     "MASTER_JWT_SECRET": "<SECRET>",
     "MASTER_ACCESS_TOKEN": "<TOKEN>",
+    "MASTER_KDF_SALT": "<SECRET>",
     "MYSQL_DB_CONNECTION": "server=<DBHOST>;user=<DBUSER>;password=<DBPASS>;database=<DBNAME>"
 }
 ```
 
 Se este arquivo não existir ou se o valor da chave `"MYSQL_DB_CONNECTION"` estiver vazio, a aplicação irá assumir um _storage_ em memória (como é o caso dos testes).
-É recomendado que ambos `"MASTER_ACCESS_TOKEN"` e `"MASTER_JWT_SECRET"` sejam uma cadeia de caracteres aleatórias e longas o suficiente para impedir qualquer tipo de
+É recomendado que ambos `"MASTER_ACCESS_TOKEN"`, `"MASTER_KDF_SALT"` e `"MASTER_JWT_SECRET"` sejam uma cadeia de caracteres aleatórias e longas o suficiente para impedir qualquer tipo de
 ataque que iria tentar descobrir os por força bruta. Tais segredos podem serem gerados com o seguinte comando unix bash para cada:
 
 ```bash

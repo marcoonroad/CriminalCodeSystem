@@ -1,0 +1,8 @@
+bin/
+obj/
+.env
+.env.*
+CriminalCodeSystem/credentials.json
+migrations/executables/*.bin
+migrations/scripts/*.sql
+TestResults/

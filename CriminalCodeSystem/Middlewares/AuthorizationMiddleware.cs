@@ -25,10 +25,10 @@ namespace CriminalCodeSystem.Middlewares
             {
                 using (var requestBodyCopy = new System.IO.MemoryStream())
                 {
-                    context.Request.Body.CopyTo(requestBodyCopy);
+                    await context.Request.Body.CopyToAsync(requestBodyCopy);
                     requestBodyCopy.Position = 0; // rewind
 
-                    string requestBody = new System.IO.StreamReader(requestBodyCopy).ReadToEnd();
+                    string requestBody = await (new System.IO.StreamReader(requestBodyCopy)).ReadToEndAsync();
 
                     var jsonSettings = new JsonSerializerSettings
                     {
@@ -38,18 +38,27 @@ namespace CriminalCodeSystem.Middlewares
                     };
 
                     var body = JsonConvert.DeserializeObject<AuthorizationRequestBodyPayload>(requestBody, jsonSettings);
-                    if (body != null && string.IsNullOrEmpty(body.AccessToken))
+                    if (body == null) {
+                        body = new AuthorizationRequestBodyPayload();
+                    }
+
+                    if (string.IsNullOrEmpty(body.AccessToken))
                     {
                         string token = context.Request.Headers["Authorization"];
                         if (string.IsNullOrEmpty(token)) {
-                            throw new Exception("User token is not provided in the request body or in the header!");
+                            if (!string.IsNullOrEmpty(context.Request.Query["accessToken"])) {
+                                body.AccessToken = context.Request.Query["accessToken"];
+                            }
+                            else {
+                                throw new Exception("User token is not provided in the request body or in the header!");
+                            }
                         }
                         else {
                             body.AccessToken = token.Replace("Bearer ", "");
                         }
                     }
 
-                    if (body != null && !JwtManager.ValidateToken(body.AccessToken))
+                    if (!JwtManager.ValidateToken(body.AccessToken))
                     {
                         throw new Exception("Invalid provided access token!");
                     }
@@ -60,8 +69,9 @@ namespace CriminalCodeSystem.Middlewares
                     await nextStep(context);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.Error.WriteLine(ex);
                 var data = new AuthorizationResponseDataPayload
                 {
                     Status = -1,

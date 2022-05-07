@@ -39,7 +39,7 @@ public class CriminalCodeController : ControllerBase
 
     [Route("List")]
     [HttpGet]
-    public async Task<ListResponse> ListAsync(ListRequest request)
+    public async Task<ListResponse> ListAsync([FromQuery] ListRequest request)
     {
         ListResponse response = new ListResponse();
         CriminalCodeContext criminalCodeContext = new CriminalCodeContext();
@@ -181,7 +181,7 @@ public class CriminalCodeController : ControllerBase
 
     [Route("Add")]
     [HttpPost]
-    public async Task<AddResponse> PostAsync(AddRequest request)
+    public async Task<AddResponse> AddAsync(AddRequest request)
     {
         AddResponse response = new AddResponse();
 
@@ -410,7 +410,7 @@ public class CriminalCodeController : ControllerBase
 
     [Route("Find")]
     [HttpGet]
-    public async Task<FindResponse> FindAsync(FindRequest request)
+    public async Task<FindResponse> FindAsync([FromQuery] FindRequest request)
     {
         FindResponse response = new FindResponse();
         CriminalCodeContext criminalCodeContext = new CriminalCodeContext();

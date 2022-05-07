@@ -24,14 +24,6 @@ builder.Services.AddCors(options =>
             });
     });
 
-/*
-string connection = "";
-builder.Services.AddDbContextPool<CriminalCodeSystem.Contexts.UserContext>(options => options.UseMySql(connection));
-builder.Services.AddDbContextPool<CriminalCodeSystem.Contexts.DisabledTokenContext>(options => options.UseMySql(connection));
-builder.Services.AddDbContextPool<CriminalCodeSystem.Contexts.StatusContext>(options => options.UseMySql(connection));
-builder.Services.AddDbContextPool<CriminalCodeSystem.Contexts.CriminalCodeContext>(options => options.UseMySql(connection));
-*/
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -60,7 +52,7 @@ else
     app.UseCors("Production");
 }
 
-app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/criminalcode"),
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/criminalcode"),
 (appImage) => {
     appImage.UseMiddleware<CriminalCodeSystem.Middlewares.AuthorizationMiddleware>();
 });
